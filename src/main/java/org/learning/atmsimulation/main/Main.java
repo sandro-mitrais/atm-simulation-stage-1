@@ -3,25 +3,26 @@ package org.learning.atmsimulation.main;
 import org.learning.atmsimulation.model.Account;
 import org.learning.atmsimulation.service.AccountService;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
 
+    static final String BALANCE_INFORMATION = "Your current balance is ";
+
     public static void main(String[] args) {
-        List<Account> accounts = new ArrayList<>();
         AccountService accountService = new AccountService();
+        Account accountSandro = new Account("Sandro", 0.0);
+        Account accountSihaloho = new Account("Sihaloho", 0.0);
         int command;
         Scanner scanner = new Scanner(System.in);
         do {
-            System.out.println("""
+            System.out.print("""
                     ========================================================
                     Welcome to ATM Simulation.....
                     0. Exit
-                    1. Create new account
-                    2. Transfer balance
-                    3. PrintAll
+                    1. Deposit Money
+                    2. Withdraw Money
+                    3. Transfer Funds
                     ========================================================
                     """);
             command = scanner.nextInt();
@@ -31,40 +32,25 @@ public class Main {
             }
 
             if (command == 1) {
-                System.out.print("What is your name?");
-                String name = scanner.next();
-                System.out.print("What is your balance?");
-                Double balance = scanner.nextDouble();
-                accounts.add(new Account(name, balance));
-                System.out.println("Success create new account");
+                System.out.print("How much money would you like to deposit?");
+                Double money = scanner.nextDouble();
+                accountSandro.deposit(money);
+                System.out.println("Success deposit money " + money);
+                System.out.println(BALANCE_INFORMATION + accountSandro.getBalance());
             }
             if (command == 2) {
-                if (accounts.size() < 2) {
-                    System.out.println("Not enough account is found.");
-                } else {
-                    System.out.print("----Login----\nPlease insert sender ID:");
-                    int idSender = scanner.nextInt();
-                    System.out.print("Please insert receiver ID:");
-                    int idReceiver = scanner.nextInt();
-                    System.out.println("How much the transfer?");
-                    Account sender = accounts.stream().filter(account -> account.getId() == idSender).findFirst()
-                            .orElse(null);
-                    Account receiver = accounts.stream().filter(account -> account.getId() == idReceiver).findFirst()
-                            .orElse(null);
-                    Double amount = scanner.nextDouble();
-                    // do the transfer
-                    accountService.transfer(sender, receiver, amount);
-                }
+                System.out.println(BALANCE_INFORMATION + accountSandro.getBalance());
+                System.out.print("How much money would you like to withdraw?");
+                Double money = scanner.nextDouble();
+                accountSandro.withdraw(money);
+                System.out.println("Success withdraw money " + money);
+                System.out.println(BALANCE_INFORMATION + accountSandro.getBalance());
             }
             if (command == 3) {
-                if (!accounts.isEmpty()) {
-                    System.out.println("We got " + accounts.size() + " account");
-                    for (Account a : accounts) {
-                        System.out.println(a);
-                    }
-                } else {
-                    System.out.println("No account registered.");
-                }
+                System.out.println(BALANCE_INFORMATION + accountSandro.getBalance());
+                System.out.println("How much funds would you like to transfer?");
+                Double amount = scanner.nextDouble();
+                accountService.transfer(accountSandro, accountSihaloho, amount);
             }
 
         } while (command != 0);

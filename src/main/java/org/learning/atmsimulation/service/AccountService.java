@@ -24,17 +24,16 @@ public class AccountService {
         }
     }
 
-    public void transfer(Account sender, Account receiver, Double amount) {
+    public void transfer(Account sender, Account receiver, Double funds) {
         try {
             //reduce balance from sender
-            reduceBalance(sender, amount);
+            reduceBalance(sender, funds);
             //add balance to receiver
-            addBalance(receiver, amount);
-            System.out.println("Transfer " + amount + " from: " + sender.getName() + " to: " + receiver.getName()
+            addBalance(receiver, funds);
+            System.out.println("Transfer " + funds + " from: " + sender.getName() + " to: " + receiver.getName()
                     + " is succeed.");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-
     }
 }
